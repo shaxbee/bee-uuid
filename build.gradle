@@ -11,8 +11,6 @@ repositories {
 }
 
 dependencies {
-    compile "commons-codec:commons-codec:1.9"
-
     testCompile "junit:junit:4.11"
     testCompile "org.hamcrest:hamcrest-all:1.3"
 }
