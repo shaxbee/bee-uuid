@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 /**
- * Created by shaxbee on 1/3/14.
+ * 
  */
 class Fields {
     private static final int TIME_LOW = 0;
@@ -15,6 +15,12 @@ class Fields {
     private static final int CLOCK_SEQ_HI_AND_RESERVED = 8;
     private static final int CLOCK_SEQ_LOW = 9;
     private static final int NODE = 10;
+
+    static {
+        if (!buffer().hasArray()) {
+            throw new IllegalStateException("ByteArray.array() support required.");
+        }
+    }
 
     public static int readTimeLow(ByteBuffer source) {
         return source.getInt(TIME_LOW);
@@ -37,7 +43,7 @@ class Fields {
     }
 
     public static long readNode(ByteBuffer source) {
-        return (source.getLong(NODE) >> 16) & 0x0000ffffffffffffl;
+        return (source.getLong(NODE) >> 16) & 0xFFFFFFFFFFFFL;
     }
 
     public static Variant readVariant(ByteBuffer source) {
@@ -49,7 +55,7 @@ class Fields {
         } else if ((clockSeq & 0xC0) == Variant.RFC_4122.value()) {
             return Variant.RFC_4122;
             // MSB - 1 1 0
-        } else if ((clockSeq & 0xE0) == Variant.RESERVED_NCS.value()) {
+        } else if ((clockSeq & 0xE0) == Variant.RESERVED_MICROSOFT.value()) {
             return Variant.RESERVED_MICROSOFT;
             // MSB - 1 1 1
         } else {
